@@ -355,16 +355,72 @@
             min-width: 280px;
             background-color: white;
             border-radius: 10px;
-            padding: 40px;
+            padding: 30px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ps-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        /* Problem Card Styling */
+        .problem-card {
+            border-top: 5px solid #FF5757;
+            background: linear-gradient(to bottom, rgba(255,87,87,0.05) 0%, rgba(255,255,255,1) 100%);
+        }
+
+        .problem-card .ps-title::before {
+            background: linear-gradient(135deg, #FF5757 0%, #FF8A8A 100%);
+        }
+
+        /* Solution Card Styling */
+        .solution-card {
+            border-top: 5px solid var(--primary);
+            background: linear-gradient(to bottom, rgba(58,54,224,0.05) 0%, rgba(255,255,255,1) 100%);
+        }
+
+        .solution-card .ps-title::before {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        /* Card Header with Icon */
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .problem-icon, .solution-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-right: 15px;
+        }
+
+        .problem-icon {
+            background-color: #FF5757;
+            color: white;
+        }
+
+        .solution-icon {
+            background-color: var(--success);
+            color: white;
         }
 
         .ps-title {
             font-size: 1.6rem;
-            margin-bottom: 20px;
+            margin-bottom: 0;
             color: var(--dark);
             position: relative;
-            padding-left: 20px;
+            padding-left: 0;
         }
 
         .ps-title::before {
@@ -376,6 +432,7 @@
             width: 4px;
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             border-radius: 2px;
+            display: none;
         }
 
         .ps-list {
@@ -386,15 +443,24 @@
             margin-bottom: 15px;
             position: relative;
             padding-left: 28px;
-            color: var(--grey);
+            color: var(--dark);
         }
 
-        .ps-list li::before {
+        .problem-card .ps-list li::before {
+            content: "✗";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #FF5757;
+            font-weight: bold;
+        }
+
+        .solution-card .ps-list li::before {
             content: "✓";
             position: absolute;
             left: 0;
             top: 0;
-            color: var(--primary);
+            color: var(--success);
             font-weight: bold;
         }
 
@@ -1374,11 +1440,12 @@
             
             /* Layout adjustments */
             .ps-container {
+                gap: 30px;
                 flex-direction: column;
             }
             
             .ps-card {
-                padding: 30px; /* Reduce padding on mobile */
+                padding: 25px; /* Reduce padding on mobile */
             }
             
             /* Feature cards and stats */
@@ -1569,8 +1636,11 @@
                 <p class="section-subtitle">Blockchain applications face fundamental limitations that prevent them from reaching their full potential in the real world.</p>
             </div>
             <div class="ps-container">
-                <div class="ps-card">
-                    <h3 class="ps-title">Current Challenges</h3>
+                <div class="ps-card problem-card">
+                    <div class="card-header">
+                        <div class="problem-icon">❌</div>
+                        <h3 class="ps-title">Current Challenges</h3>
+                    </div>
                     <ul class="ps-list">
                         <li>Developers are locked into specific languages like Solidity, limiting innovation</li>
                         <li>Smart contracts struggle to access real-world data without complex oracle setups</li>
@@ -1579,8 +1649,11 @@
                         <li>Chain-specific applications create fragmented ecosystems</li>
                     </ul>
                 </div>
-                <div class="ps-card">
-                    <h3 class="ps-title">ModRoll Solution</h3>
+                <div class="ps-card solution-card">
+                    <div class="card-header">
+                        <div class="solution-icon">✅</div>
+                        <h3 class="ps-title">ModRoll Solution</h3>
+                    </div>
                     <ul class="ps-list">
                         <li>Multi-language support (Python, JavaScript, Move) for familiar development</li>
                         <li>Built-in data integration for real-time access to external APIs and events</li>
