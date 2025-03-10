@@ -164,6 +164,8 @@
             padding: 10px; /* Reduce padding */
             margin: -10px; /* Adjust negative margin */
             position: relative; /* Ensure proper positioning */
+            margin-left: auto; /* Push to the far right */
+            margin-right: 10px; /* Add some space from the edge */
         }
 
         .hamburger span {
@@ -1286,6 +1288,12 @@
                 flex-direction: row;
                 padding: 1rem 0;
                 align-items: center;
+                justify-content: space-between; /* Ensure space distribution */
+            }
+
+            .hamburger {
+                display: flex;
+                margin-left: auto; /* Ensure it's pushed to the right */
             }
             
             .logo {
