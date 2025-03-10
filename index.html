@@ -1,0 +1,1933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModRoll - The Programmable Blockchain Middleware</title>
+    <style>
+        :root {
+            --primary: #3A36E0;
+            --primary-dark: #2A26D0;
+            --secondary: #00C2FF;
+            --tertiary: #FFA500;
+            --dark: #1A1A2E;
+            --light: #F8F8FF;
+            --grey: #8A8AA0;
+            --success: #00D26A;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        button {
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            top: 0;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 0;
+            gap: 1.5rem; /* Reduced from 2rem */
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .logo-icon {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-icon span {
+            color: white;
+            font-weight: 900;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.2rem; /* Reduced from 2rem */
+            margin: 0;
+            padding: 0;
+        }
+        
+        nav ul li {
+            margin: 0;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 0.8rem; /* Reduced from 1rem */
+            white-space: nowrap;
+        }
+        
+        nav ul li a {
+            font-size: 0.9rem; /* Reduced from default size */
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding-top: 120px;
+            padding-bottom: 80px;
+            background: linear-gradient(135deg, rgba(248,248,255,1) 0%, rgba(240,240,255,1) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-text {
+            max-width: 550px;
+        }
+        
+        .hero-title {
+            font-size: 3.2rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--grey);
+            margin-bottom: 2rem;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .hero-image {
+            max-width: 500px;
+            flex-shrink: 0;
+        }
+        
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.5;
+            filter: blur(30px);
+        }
+        
+        .element-1 {
+            width: 300px;
+            height: 300px;
+            background-color: rgba(58, 54, 224, 0.1);
+            top: -100px;
+            right: -100px;
+        }
+        
+        .element-2 {
+            width: 200px;
+            height: 200px;
+            background-color: rgba(0, 194, 255, 0.1);
+            bottom: -50px;
+            left: 10%;
+        }
+        
+        .element-3 {
+            width: 150px;
+            height: 150px;
+            background-color: rgba(255, 165, 0, 0.1);
+            top: 30%;
+            left: 20%;
+        }
+        
+        /* Section Styling */
+        section {
+            padding: 80px 0;
+        }
+        
+        section:nth-child(odd) {
+            background-color: white;
+        }
+        
+        section:nth-child(even) {
+            background-color: var(--light);
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--grey);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Problem Solution Section */
+        .ps-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 40px;
+            margin-top: 60px;
+        }
+        
+        .ps-card {
+            flex: 1;
+            min-width: 280px;
+            background-color: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        
+        .ps-title {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .ps-title::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 2px;
+        }
+        
+        .ps-list {
+            list-style: none;
+        }
+        
+        .ps-list li {
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 28px;
+            color: var(--grey);
+        }
+        
+        .ps-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .icon-1 {
+            background: linear-gradient(135deg, #3A36E0 0%, #5D5FEF 100%);
+        }
+        
+        .icon-2 {
+            background: linear-gradient(135deg, #00C2FF 0%, #01E2FF 100%);
+        }
+        
+        .icon-3 {
+            background: linear-gradient(135deg, #FFA500 0%, #FF7A00 100%);
+        }
+        
+        .icon-4 {
+            background: linear-gradient(135deg, #00D26A 0%, #00F280 100%);
+        }
+        
+        .feature-icon i {
+            font-size: 24px;
+            color: white;
+        }
+        
+        .feature-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--dark);
+        }
+        
+        .feature-text {
+            color: var(--grey);
+            font-size: 0.95rem;
+        }
+        
+        /* Architecture Components */
+        .arch-components {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .arch-component {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .arch-title {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .arch-desc {
+            color: var(--grey);
+            font-size: 0.95rem;
+        }
+        
+        /* Code Example Tabs */
+        .code-tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .code-tab {
+            padding: 10px 20px;
+            background-color: transparent;
+            border: none;
+            font-weight: bold;
+            font-size: 1rem;
+            color: var(--grey);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .code-tab.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        .code-tab:hover {
+            color: var(--primary);
+        }
+        
+        .code-content {
+            display: none;
+        }
+        
+        .code-content.active {
+            display: block;
+        }
+        
+        .code-example {
+            background-color: var(--light);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .code-header {
+            display: flex;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .code-lang {
+            padding: 8px 20px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .code-title {
+            margin-left: 15px;
+            color: var(--grey);
+            align-self: center;
+            font-size: 0.9rem;
+        }
+        
+        pre {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        /* Market Stats */
+        .market-stats {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+        
+        .stat-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            padding: 30px;
+            min-width: 220px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-label {
+            color: var(--grey);
+            font-size: 1rem;
+        }
+        
+        /* Market Segments */
+        .market-segments {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .segment-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        
+        .segment-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .segment-icon {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            background: linear-gradient(135deg, rgba(58, 54, 224, 0.1) 0%, rgba(0, 194, 255, 0.1) 100%);
+        }
+        
+        .segment-content {
+            padding: 25px;
+        }
+        
+        .segment-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .segment-text {
+            color: var(--grey);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 50px;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .comparison-table th {
+            background-color: var(--primary);
+            color: white;
+            text-align: left;
+            padding: 15px 20px;
+        }
+        
+        .comparison-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .feature-yes {
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        .feature-no {
+            color: var(--grey);
+        }
+        
+        .feature-partial {
+            color: var(--tertiary);
+        }
+        
+        /* How It Works */
+        .workflow-container {
+            position: relative;
+            margin-top: 60px;
+        }
+        
+        .timeline {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background-color: var(--primary);
+            transform: translateX(-50%);
+        }
+        
+        .workflow-step {
+            display: flex;
+            margin-bottom: 80px;
+            position: relative;
+        }
+        
+        .workflow-step:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+        
+        .workflow-step:nth-child(odd) .workflow-content {
+            margin-right: 60px;
+            margin-left: 0;
+            text-align: right;
+        }
+        
+        .workflow-step:nth-child(even) .workflow-content {
+            margin-left: 60px;
+        }
+        
+        .workflow-circle {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border: 4px solid var(--primary);
+            border-radius: 50%;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .workflow-image,
+        .workflow-content {
+            flex: 1;
+        }
+        
+        .workflow-image img {
+            width: 100%;
+            max-width: 450px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .workflow-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .workflow-description {
+            color: var(--grey);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Pricing Tiers */
+        .pricing-tiers {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .pricing-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 300px;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .pricing-card.featured {
+            border: 2px solid var(--primary);
+            position: relative;
+        }
+        
+        .featured-tag {
+            position: absolute;
+            top: -15px;
+            right: 30px;
+            background-color: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .pricing-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 20px 0;
+            color: var(--primary);
+        }
+        
+        .pricing-period {
+            font-size: 1rem;
+            color: var(--grey);
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin: 30px 0;
+        }
+        
+        .pricing-features li {
+            margin-bottom: 15px;
+            color: var(--grey);
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .pricing-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+        }
+        
+        /* Roadmap */
+        .roadmap-container {
+            margin-top: 50px;
+            position: relative;
+        }
+        
+        .roadmap-line {
+            position: absolute;
+            top: 30px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: rgba(58, 54, 224, 0.2);
+            z-index: 1;
+        }
+        
+        .roadmap-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .roadmap-step {
+            text-align: center;
+            width: 220px;
+        }
+        
+        .roadmap-point {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: white;
+            border: 4px solid var(--primary);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        .roadmap-date {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .roadmap-info {
+            color: var(--grey);
+            font-size: 0.9rem;
+        }
+        
+        /* Fallback Section */
+        .fallback-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-top: 50px;
+        }
+        
+        .fallback-image {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .fallback-image img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .fallback-text {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .fallback-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        .fallback-steps {
+            list-style: none;
+            margin-left: 0;
+            padding-left: 0;
+        }
+        
+        .fallback-step {
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 35px;
+        }
+        
+        .step-number {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 25px;
+            height: 25px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .business-impact {
+            margin-top: 60px;
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .impact-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--dark);
+        }
+        
+        .impact-stats {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+        }
+        
+        .impact-stat {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        .impact-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .impact-label {
+            color: var(--grey);
+        }
+        
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        
+        .btn-light {
+            background-color: white;
+            color: var(--primary);
+        }
+        
+        .btn-light:hover {
+            background-color: rgba(255,255,255,0.9);
+        }
+        
+        .btn-outline-light {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+        
+        .btn-outline-light:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        
+        .footer-text {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 20px;
+            max-width: 300px;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        
+        .social-icon:hover {
+            background-color: var(--primary);
+        }
+        
+        .footer-title {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero-content {
+                flex-direction: column;
+            }
+            
+            .hero-text {
+                margin-bottom: 40px;
+                text-align: center;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .workflow-step {
+                flex-direction: column !important;
+                align-items: center;
+            }
+            
+            .workflow-image, 
+            .workflow-content {
+                width: 100%;
+                margin: 0 0 30px 0 !important;
+                text-align: center !important;
+            }
+            
+            .timeline {
+                left: 20px;
+            }
+            
+            .workflow-circle {
+                left: 20px;
+            }
+            
+            .roadmap-steps {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .roadmap-step {
+                margin-bottom: 40px;
+            }
+            
+            .roadmap-line {
+                display: none;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .fallback-section {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .header-content {
+                flex-direction: column;
+                padding: 1rem 0;
+            }
+            
+            .logo {
+                margin-bottom: 20px;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .header-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .header-buttons .btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            nav ul li {
+                margin: 10px 0;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .ps-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon"><span>M</span></div>
+                    ModRoll
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#problem-solution">Solution</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#architecture">Architecture</a></li>
+                        <li><a href="#code-examples">Code Examples</a></li>
+                        <li><a href="#market">Market</a></li>
+                        <li><a href="#business-model">Business Model</a></li>
+                        <li><a href="#roadmap">Roadmap</a></li>
+                    </ul>
+                </nav>
+                <div class="header-buttons">
+                    <a href="#" class="btn btn-outline">Documentation</a>
+                    <a href="#contact" class="btn">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="floating-elements">
+            <div class="floating-element element-1"></div>
+            <div class="floating-element element-2"></div>
+            <div class="floating-element element-3"></div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">Modular Rollup Middleware for Data-Driven Blockchain</h1>
+                    <p class="hero-subtitle">Build programmable, multi-language smart contracts that connect to real-world data across any blockchain. The missing link between blockchain and the world.</p>
+                    <div class="hero-buttons">
+                        <a href="#contact" class="btn">Start Building Now</a>
+                        <a href="#how-it-works" class="btn btn-outline">See How It Works</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://via.placeholder.com/500x350" alt="Modular Rollup Middleware Visualization">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <script>
+        // Tab switching for code examples
+        function showCode(language) {
+            // Hide all code contents
+            const contents = document.querySelectorAll('.code-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Deactivate all tabs
+            const tabs = document.querySelectorAll('.code-tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected content and activate tab
+            document.getElementById(language).classList.add('active');
+            
+            // Find and activate the correct tab
+            const activeTab = document.querySelector(`.code-tab[onclick="showCode('${language}')"]`);
+            if (activeTab) {
+                activeTab.classList.add('active');
+            }
+        }
+        
+        // Smooth scrolling for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        window.scrollTo({
+                            top: target.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+        
+        // Add active class to header on scroll
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 10) {
+                document.querySelector('header').classList.add('scrolled');
+            } else {
+                document.querySelector('header').classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
+    
+    
+
+    <!-- Problem Solution Section -->
+    <section class="problem-solution" id="problem-solution">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">The Problem & Our Solution</h2>
+                <p class="section-subtitle">Blockchain applications face fundamental limitations that prevent them from reaching their full potential in the real world.</p>
+            </div>
+            <div class="ps-container">
+                <div class="ps-card">
+                    <h3 class="ps-title">Current Challenges</h3>
+                    <ul class="ps-list">
+                        <li>Developers are locked into specific languages like Solidity, limiting innovation</li>
+                        <li>Smart contracts struggle to access real-world data without complex oracle setups</li>
+                        <li>Blockchain scalability issues make applications slow and expensive</li>
+                        <li>Enterprises find blockchains too rigid for integration with existing systems</li>
+                        <li>Chain-specific applications create fragmented ecosystems</li>
+                    </ul>
+                </div>
+                <div class="ps-card">
+                    <h3 class="ps-title">ModRoll Solution</h3>
+                    <ul class="ps-list">
+                        <li>Multi-language support (Python, JavaScript, Move) for familiar development</li>
+                        <li>Built-in data integration for real-time access to external APIs and events</li>
+                        <li>Off-chain execution with on-chain security through modular architecture</li>
+                        <li>Pluggable sequencing layer compatible with multiple blockchains</li>
+                        <li>Automatic failover mechanisms for enterprise-grade reliability</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">How It Works</h2>
+                <p class="section-subtitle">Our modular approach separates execution from sequencing, allowing for flexible, data-driven blockchain transactions.</p>
+            </div>
+            <div class="workflow-container">
+                <div class="timeline"></div>
+                
+                <div class="workflow-step">
+                    <div class="workflow-circle">1</div>
+                    <div class="workflow-image">
+                        <img src="https://via.placeholder.com/450x300" alt="Write Code In Any Language">
+                    </div>
+                    <div class="workflow-content">
+                        <h3 class="workflow-title">Write In Any Language</h3>
+                        <p class="workflow-description">Create smart contracts using Python, JavaScript, Move, or any supported language. Focus on your business logic, not learning new languages.</p>
+                    </div>
+                </div>
+                
+                <div class="workflow-step">
+                    <div class="workflow-circle">2</div>
+                    <div class="workflow-image">
+                        <img src="https://via.placeholder.com/450x300" alt="Connect External Data Sources">
+                    </div>
+                    <div class="workflow-content">
+                        <h3 class="workflow-title">Connect External Data</h3>
+                        <p class="workflow-description">Easily integrate external APIs, market data feeds, IoT sensors, and other real-world data sources into your blockchain applications.</p>
+                    </div>
+                </div>
+                
+                <div class="workflow-step">
+                    <div class="workflow-circle">3</div>
+                    <div class="workflow-image">
+                        <img src="https://via.placeholder.com/450x300" alt="Execute Off-Chain">
+                    </div>
+                    <div class="workflow-content">
+                        <h3 class="workflow-title">Execute Off-Chain</h3>
+                        <p class="workflow-description">Your code executes in a secure, deterministic environment with access to real-world data, providing high performance without blockchain limitations.</p>
+                    </div>
+                </div>
+                
+                <div class="workflow-step">
+                    <div class="workflow-circle">4</div>
+                    <div class="workflow-image">
+                        <img src="https://via.placeholder.com/450x300" alt="Sequence On-Chain">
+                    </div>
+                    <div class="workflow-content">
+                        <h3 class="workflow-title">Sequence On-Chain</h3>
+                        <p class="workflow-description">Transaction results are ordered and verified by your chosen blockchain (SUI, Ethereum, Celestia, etc.), providing security and immutability.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Key Features</h2>
+                <p class="section-subtitle">Our modular middleware bridges the gap between blockchain and real-world data, making smart contracts truly dynamic and accessible.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon icon-1">
+                        <i>🌐</i>
+                    </div>
+                    <h3 class="feature-title">Multi-Language Execution</h3>
+                    <p class="feature-text">Write smart contracts in Python, JavaScript, Move and more. No need to learn Solidity or other blockchain-specific languages.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon icon-2">
+                        <i>📊</i>
+                    </div>
+                    <h3 class="feature-title">Real-World Data Integration</h3>
+                    <p class="feature-text">Connect your blockchain applications to external APIs, market data, weather reports, IoT sensors, and other real-world data sources.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon icon-3">
+                        <i>🔗</i>
+                    </div>
+                    <h3 class="feature-title">Pluggable Sequencing Layer</h3>
+                    <p class="feature-text">Deploy to SUI blockchain as primary sequencer with support for Ethereum, Celestia, or other compatible chains as alternatives.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon icon-4">
+                        <i>🛡️</i>
+                    </div>
+                    <h3 class="feature-title">Automatic Failover</h3>
+                    <p class="feature-text">Built-in reliability with our Fallback Manager that switches sequencers if one fails, ensuring your transactions are always processed.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market" id="market">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Market Opportunity</h2>
+                <p class="section-subtitle">ModRoll sits at the intersection of multiple high-growth markets in the blockchain ecosystem.</p>
+            </div>
+            <div class="market-stats">
+                <div class="stat-card">
+                    <div class="stat-number">$14.3B</div>
+                    <div class="stat-label">DeFi Market Size in 2023</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">46.8%</div>
+                    <div class="stat-label">Annual DeFi Growth Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$145B+</div>
+                    <div class="stat-label">Enterprise Blockchain by 2030</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">22,000+</div>
+                    <div class="stat-label">Active Blockchain Developers</div>
+                </div>
+            </div>
+            
+            <div class="section-header" style="margin-top: 60px;">
+                <h3 class="section-title" style="font-size: 1.8rem;">Who Can Benefit</h3>
+                <p class="section-subtitle">Our middleware serves multiple segments in the blockchain ecosystem</p>
+            </div>
+            <div class="market-segments">
+                <div class="segment-card">
+                    <div class="segment-icon">💰</div>
+                    <div class="segment-content">
+                        <h3 class="segment-title">DeFi Platforms</h3>
+                        <p class="segment-text">Create dynamic financial products like automated trading strategies, stop-loss orders, and market-responsive mechanisms.</p>
+                    </div>
+                </div>
+                <div class="segment-card">
+                    <div class="segment-icon">🏢</div>
+                    <div class="segment-content">
+                        <h3 class="segment-title">Enterprise Solutions</h3>
+                        <p class="segment-text">Enable smart supply chain tracking, IoT-based automation, and real-time financial contracts with enterprise-grade reliability.</p>
+                    </div>
+                </div>
+                <div class="segment-card">
+                    <div class="segment-icon">👾</div>
+                    <div class="segment-content">
+                        <h3 class="segment-title">Blockchain Gaming</h3>
+                        <p class="segment-text">Power low-latency in-game transactions and create dynamic NFTs that react to real-world events.</p>
+                    </div>
+                </div>
+                <div class="segment-card">
+                    <div class="segment-icon">👨‍💻</div>
+                    <div class="segment-content">
+                        <h3 class="segment-title">Web3 Developers</h3>
+                        <p class="segment-text">Build in languages you already know, with familiar tools and workflows, reducing the barrier to blockchain development.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Competitive Edge Section -->
+    <section class="competitors">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Competitive Edge</h2>
+                <p class="section-subtitle">ModRoll offers unique capabilities that set it apart from existing solutions in the blockchain space.</p>
+            </div>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>ModRoll</th>
+                        <th>Chainlink Functions</th>
+                        <th>Optimism/Arbitrum</th>
+                        <th>Hyperledger Fabric</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Multi-language support</td>
+                        <td class="feature-yes">✓</td>
+                        <td class="feature-partial">Limited</td>
+                        <td class="feature-no">Solidity only</td>
+                        <td class="feature-yes">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Real-world data integration</td>
+                        <td class="feature-yes">✓</td>
+                        <td class="feature-yes">✓</td>
+                        <td class="feature-no">Requires oracles</td>
+                        <td class="feature-partial">Limited</td>
+                    </tr>
+                    <tr>
+                        <td>Pluggable consensus</td>
+                        <td class="feature-yes">✓</td>
+                        <td class="feature-no">×</td>
+                        <td class="feature-no">Ethereum only</td>
+                        <td class="feature-partial">Private only</td>
+                    </tr>
+                    <tr>
+                        <td>Public chain security</td>
+                        <td class="feature-yes">✓</td>
+                        <td class="feature-yes">✓</td>
+                        <td class="feature-yes">✓</td>
+                        <td class="feature-no">×</td>
+                    </tr>
+                    <tr>
+                        <td>Automatic failover</td>
+                        <td class="feature-yes">✓</td>
+                        <td class="feature-partial">Limited</td>
+                        <td class="feature-no">×</td>
+                        <td class="feature-partial">Manual</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Technical Architecture Section -->
+    <section class="architecture" id="architecture">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Technical Architecture</h2>
+                <p class="section-subtitle">Our modular design separates key components to enable flexibility, reliability, and integration with blockchain networks.</p>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <img src="https://via.placeholder.com/800x500" alt="ModRoll Technical Architecture Diagram" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            </div>
+            <div class="arch-components">
+                <div class="arch-component">
+                    <h3 class="arch-title">SUI Connection Manager</h3>
+                    <p class="arch-desc">Handles communication with the SUI blockchain, including transaction submission, state queries, and event monitoring.</p>
+                </div>
+                <div class="arch-component">
+                    <h3 class="arch-title">Fallback Manager</h3>
+                    <p class="arch-desc">Monitors blockchain connections and automatically switches to alternative sequencers if the primary connection fails.</p>
+                </div>
+                <div class="arch-component">
+                    <h3 class="arch-title">Module Manager</h3>
+                    <p class="arch-desc">Manages deployment and versioning of your code modules across blockchain networks, ensuring consistency.</p>
+                </div>
+                <div class="arch-component">
+                    <h3 class="arch-title">Transaction Manager</h3>
+                    <p class="arch-desc">Executes your code in our secure runtime environment, processes external data, and prepares transactions for the blockchain.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Code Examples Section -->
+    <section class="code-examples" id="code-examples">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Multi-Language Smart Contracts</h2>
+                <p class="section-subtitle">Write blockchain applications in the language you already know. Here are examples of how ModRoll enables development in different languages.</p>
+            </div>
+            
+            <div class="code-example" style="margin-top: 40px;">
+                <div class="code-tabs">
+                    <button class="code-tab active" onclick="showCode('python')">Python</button>
+                    <button class="code-tab" onclick="showCode('javascript')">JavaScript</button>
+                    <button class="code-tab" onclick="showCode('move')">Move</button>
+                </div>
+                
+                <div id="python" class="code-content active">
+                    <div class="code-header">
+                        <div class="code-lang">Python</div>
+                        <div class="code-title">Dynamic NFT with Weather Data</div>
+                    </div>
+                    <pre>
+# Initialize the ModRoll client
+client = ModRollClient(
+    connection_type="sui",
+    network="testnet",
+    fallback_enabled=True
+)
+
+# Define a function to update an NFT based on weather data
+def update_weather_nft(nft_id, location):
+    # Fetch real-time weather data from external API
+    weather_feed = DataFeed("weather", {
+        "location": location,
+        "api_key": "YOUR_API_KEY"
+    })
+    
+    # Get current weather conditions
+    current_weather = weather_feed.get_data()
+    
+    # Create transaction with external data
+    transaction = Transaction()
+    
+    # Add weather data to transaction
+    transaction.add_data("temperature", current_weather["temperature"])
+    transaction.add_data("conditions", current_weather["conditions"])
+    
+    # Prepare NFT update based on weather conditions
+    if current_weather["conditions"] == "sunny":
+        new_image_url = "ipfs://QmSunnyImageHash"
+        new_attributes = {"mood": "happy", "background": "bright"}
+    elif current_weather["conditions"] == "rainy":
+        new_image_url = "ipfs://QmRainyImageHash"
+        new_attributes = {"mood": "melancholy", "background": "grey"}
+    else:
+        new_image_url = "ipfs://QmDefaultImageHash"
+        new_attributes = {"mood": "neutral", "background": "standard"}
+    
+    # Execute transaction on SUI blockchain
+    result = client.execute_transaction(transaction)
+    
+    return result</pre>
+                </div>
+                
+                <div id="javascript" class="code-content">
+                    <div class="code-header">
+                        <div class="code-lang">JavaScript</div>
+                        <div class="code-title">DeFi Stop-Loss Order with Market Data</div>
+                    </div>
+                    <pre>
+// Create ModRoll client with SUI connection
+const client = new ModRollClient({
+  connectionType: 'sui',
+  network: 'mainnet',
+  fallbackEnabled: true
+});
+
+// Define a stop-loss order function
+async function createStopLossOrder(token, amount, stopPrice) {
+  // Connect to price feed
+  const priceFeed = new DataFeed('crypto_price', {
+    token: token,
+    source: 'binance'
+  });
+  
+  // Get current token price
+  const currentPrice = await priceFeed.getData();
+  
+  // Check if stop loss should trigger immediately
+  if (currentPrice.price <= stopPrice) {
+    return executeOrder(token, amount);
+  }
+  
+  // Set up conditional transaction
+  const transaction = new Transaction();
+  
+  // Add price condition
+  transaction.addCondition({
+    type: 'price_below',
+    token: token,
+    threshold: stopPrice,
+    data_source: 'binance'
+  });
+  
+  // Add sell order instruction
+  transaction.addInstruction('market_sell', {
+    token: token,
+    amount: amount
+  });
+  
+  // Deploy conditional transaction
+  const result = await client.deployConditionalTransaction(transaction);
+  
+  return {
+    status: 'pending',
+    order_id: result.order_id,
+    transaction_id: result.transaction_id
+  };
+}</pre>
+                </div>
+                
+                <div id="move" class="code-content">
+                    <div class="code-header">
+                        <div class="code-lang">Move</div>
+                        <div class="code-title">Supply Chain Verification on SUI</div>
+                    </div>
+                    <pre>
+module Product.SupplyChainVerifier {
+    use Sui::object::{Self, UID};
+    use Sui::transfer;
+    use Sui::tx_context::{Self, TxContext};
+    
+    // Product struct representing a physical item
+    struct Product has key, store {
+        id: UID,
+        name: String,
+        manufacturer: address,
+        manufacture_date: u64,
+        batch_id: String,
+        current_location: String,
+        temperature_log: vector&lt;u64&gt;,
+        verified: bool
+    }
+    
+    // Update product location (called from ModRoll with IoT data)
+    public fun update_location(
+        product: &mut Product,
+        new_location: String,
+        current_temperature: u64,
+        _ctx: &mut TxContext
+    ) {
+        product.current_location = new_location;
+        vector::push_back(&mut product.temperature_log, current_temperature);
+    }
+    
+    // Verify the product meets quality standards
+    public fun verify_product(
+        product: &mut Product,
+        ctx: &mut TxContext
+    ) {
+        // Check temperature log for any values outside acceptable range
+        let i = 0;
+        let temp_ok = true;
+        while (i < vector::length(&product.temperature_log)) {
+            let temp = *vector::borrow(&product.temperature_log, i);
+            if (temp < 2 || temp > 8) {  // Example: 2-8°C range for pharmaceuticals
+                temp_ok = false;
+                break;
+            };
+            i = i + 1;
+        };
+        
+        // Update product verification status
+        product.verified = temp_ok;
+    }
+}</pre>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="#" class="btn">View Full Documentation</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fallback Mechanism Section -->
+    <section class="fallback-mechanism">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Enterprise-Grade Reliability</h2>
+                <p class="section-subtitle">Our unique Fallback Manager ensures transactions are processed even during network disruptions.</p>
+            </div>
+            
+            <div class="fallback-section">
+                <div class="fallback-image">
+                    <img src="https://via.placeholder.com/450x300" alt="Fallback Manager Illustration">
+                </div>
+                <div class="fallback-text">
+                    <h3 class="fallback-title">How the Fallback Manager Works</h3>
+                    <ul class="fallback-steps">
+                        <li class="fallback-step">
+                            <div class="step-number">1</div>
+                            <strong>Continuous Monitoring:</strong> The Fallback Manager constantly monitors the health and performance of connected blockchains.
+                        </li>
+                        <li class="fallback-step">
+                            <div class="step-number">2</div>
+                            <strong>Failure Detection:</strong> If SUI (primary sequencer) experiences delays, congestion, or outages, the system detects the issue immediately.
+                        </li>
+                        <li class="fallback-step">
+                            <div class="step-number">3</div>
+                            <strong>Automatic Switching:</strong> Transactions are automatically rerouted to alternative sequencers (Ethereum, Celestia, etc.) without any action required.
+                        </li>
+                        <li class="fallback-step">
+                            <div class="step-number">4</div>
+                            <strong>Transaction Integrity:</strong> The same transaction logic and data is preserved across chains, ensuring consistent execution.
+                        </li>
+                        <li class="fallback-step">
+                            <div class="step-number">5</div>
+                            <strong>Auto-Recovery:</strong> When the primary sequencer is operational again, the system can automatically return to it for future transactions.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="business-impact">
+                <h3 class="impact-title">Business Impact</h3>
+                <div class="impact-stats">
+                    <div class="impact-stat">
+                        <div class="impact-number">99.9%</div>
+                        <p class="impact-label">Uptime guarantee for enterprise customers</p>
+                    </div>
+                    <div class="impact-stat">
+                        <div class="impact-number">Zero</div>
+                        <p class="impact-label">Single-point-of-failure risk</p>
+                    </div>
+                    <div class="impact-stat">
+                        <div class="impact-number">&lt;5s</div>
+                        <p class="impact-label">Average failover detection and switching time</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Model Section -->
+    <section class="business-model" id="business-model">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Business Model</h2>
+                <p class="section-subtitle">Our monetization strategy is designed to provide value at all levels of adoption while scaling with our users' success.</p>
+            </div>
+            <div class="pricing-tiers">
+                <div class="pricing-card">
+                    <h3 class="pricing-title">Developer</h3>
+                    <div class="pricing-price">$50<span class="pricing-period">/month</span></div>
+                    <ul class="pricing-features">
+                        <li>Multi-language execution</li>
+                        <li>Up to 100,000 transactions/month</li>
+                        <li>Basic external data access</li>
+                        <li>Community support</li>
+                        <li>Standard monitoring</li>
+                    </ul>
+                    <a href="#" class="btn" style="width: 100%;">Start Free Trial</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <div class="featured-tag">Popular</div>
+                    <h3 class="pricing-title">Business</h3>
+                    <div class="pricing-price">$200<span class="pricing-period">/month</span></div>
+                    <ul class="pricing-features">
+                        <li>Advanced execution options</li>
+                        <li>Up to 1 million transactions/month</li>
+                        <li>Premium data sources</li>
+                        <li>Priority support</li>
+                        <li>Advanced analytics & alerts</li>
+                        <li>Multiple environments</li>
+                    </ul>
+                    <a href="#" class="btn" style="width: 100%;">Start Free Trial</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3 class="pricing-title">Enterprise</h3>
+                    <div class="pricing-price">Custom</div>
+                    <ul class="pricing-features">
+                        <li>Unlimited transactions</li>
+                        <li>Custom data integrations</li>
+                        <li>Dedicated infrastructure</li>
+                        <li>Dedicated support manager</li>
+                        <li>SLA guarantees</li>
+                        <li>On-premise option available</li>
+                        <li>Custom development</li>
+                    </ul>
+                    <a href="#" class="btn" style="width: 100%;">Contact Sales</a>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px; color: var(--grey); max-width: 700px; margin-left: auto; margin-right: auto;">
+                <p>Additional usage-based API fees of $0.001 per transaction apply after included transaction limits. Enterprise contracts range from $50K-$500K annually based on usage and requirements.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section class="roadmap" id="roadmap">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Roadmap</h2>
+                <p class="section-subtitle">Our strategic vision for bringing ModRoll to market and scaling it to become industry infrastructure.</p>
+            </div>
+            <div class="roadmap-container">
+                <div class="roadmap-line"></div>
+                <div class="roadmap-steps">
+                    <div class="roadmap-step">
+                        <div class="roadmap-point">1</div>
+                        <div class="roadmap-date">Phase 1: Year 1</div>
+                        <div class="roadmap-info">Open-source launch, developer SDK, testnet sandbox, hackathons and grants, university partnerships, initial pilot customers</div>
+                    </div>
+                    <div class="roadmap-step">
+                        <div class="roadmap-point">2</div>
+                        <div class="roadmap-date">Phase 2: Year 2-3</div>
+                        <div class="roadmap-info">SaaS platform launch, conversion to paid subscriptions, growing developer base to 1000+ users, expansion of enterprise licensing deals</div>
+                    </div>
+                    <div class="roadmap-step">
+                        <div class="roadmap-point">3</div>
+                        <div class="roadmap-date">Phase 3: Year 4-5</div>
+                        <div class="roadmap-info">Scaling to $3M+ ARR, decentralized sequencer network, expanded industry integrations, strategic positioning for acquisition or VC-backed scale-up</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="container">
+            <h2 class="cta-title">Ready to Bridge Blockchain and Real-World Data?</h2>
+            <p class="cta-subtitle">Join developers and enterprises already using ModRoll to create next-generation blockchain applications.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-light">Get Started Free</a>
+                <a href="#" class="btn btn-outline-light">Schedule Demo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">ModRoll</div>
+                    <p class="footer-text">Building the bridge between blockchain and the real world with modular, data-driven middleware.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-icon">📱</a>
+                        <a href="#" class="social-icon">💬</a>
+                        <a href="#" class="social-icon">🐦</a>
+                        <a href="#" class="social-icon">📷</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Products</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Developer SDK</a></li>
+                        <li><a href="#">Enterprise Solutions</a></li>
+                        <li><a href="#">API Documentation</a></li>
+                        <li><a href="#">Pricing</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Tutorials</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Community</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Press Kit</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 ModRoll. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
